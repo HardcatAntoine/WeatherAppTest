@@ -17,8 +17,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
-    @Inject
-    lateinit var testString: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -95,11 +94,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("DI Test", testString)
     }
 
     override fun onDestroy() {
