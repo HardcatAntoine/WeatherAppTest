@@ -36,3 +36,5 @@ Thumbs.db
 #Other
 /captures
 .cxx
+
+/app/src/main/java/com/example/weatherapptest/util/Secrets.kt
