@@ -1,4 +1,4 @@
-package com.example.weatherapptest.data
+package com.example.weatherapptest.data.model
 
 data class WeatherData(
     val city: City,

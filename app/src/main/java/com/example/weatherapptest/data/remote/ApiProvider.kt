@@ -1,4 +1,4 @@
-package com.example.weatherapptest.api
+package com.example.weatherapptest.data.remote
 
 import com.example.weatherapptest.BASE_URL
 import okhttp3.OkHttpClient
