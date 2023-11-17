@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.weatherapptest.data.local.Preference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,14 +25,13 @@ class MainActivity : AppCompatActivity() {
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                val latitude = location.latitude
-                val longitude = location.longitude
+                val latitude = location.latitude.toString()
+                val longitude = location.longitude.toString()
                 // Действия при получении новой геопозиции
-                Toast.makeText(
-                    applicationContext,
+                Log.d(
+                    "GAY LOCATION",
                     "Latitude: $latitude, Longitude: $longitude",
-                    Toast.LENGTH_SHORT
-                ).show()
+                )
             }
 
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             startLocationUpdates()
         }
     }
+
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
