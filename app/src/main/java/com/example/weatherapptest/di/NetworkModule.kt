@@ -1,6 +1,6 @@
 package com.example.weatherapptest.di
 
-import com.example.weatherapptest.BASE_URL
+import com.example.weatherapptest.util.BASE_URL
 import com.example.weatherapptest.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
@@ -31,6 +31,7 @@ class NetworkModule {
         return OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(ApiKeyInterceptor())
             .build()
     }
 
