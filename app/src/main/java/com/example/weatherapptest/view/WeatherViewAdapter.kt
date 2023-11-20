@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapptest.R
 import com.example.weatherapptest.data.model.DataList
 
-class WeatherViewAdapter(private val list: List<DataList>) :
+class WeatherViewAdapter() :
     RecyclerView.Adapter<WeatherViewHolder>() {
+    private var list: List<DataList> = listOf()
     var clickListener: ItemClickListener? = null
     fun setOnItemClickListener(clickListener: ItemClickListener) {
         this.clickListener = clickListener
@@ -27,8 +28,12 @@ class WeatherViewAdapter(private val list: List<DataList>) :
         val item = list[position]
         holder.bindWeather(item)
         holder.itemView.setOnClickListener {
-            clickListener?.onDetailsClickListener(position,item)
+            clickListener?.onDetailsClickListener(position, item)
         }
+    }
+
+    fun setList(list: List<DataList>) {
+        this.list = list
     }
 
 }

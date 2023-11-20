@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapptest.data.model.DataList
 import com.example.weatherapptest.data.repo.WeatherRepository
+import com.example.weatherapptest.util.UNITS
 import com.example.weatherapptest.view.WeatherFragmentUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,19 +26,11 @@ class WeatherViewModel @Inject constructor(
     val weatherData: LiveData<List<DataList>>
         get() = _weatherData
 
-    fun print() {
-        val lat = repository.getLatitude()
-        Log.d("ViewModelTest", lat.toString())
-    }
-
     fun fetchWeatherData() {
-//        val fetchingJob = viewModelScope.async {
-//            repository.getWeather(fakeGeoData.lat, fakeGeoData.lon, apiKey)
-//        }
         viewModelScope.launch {
             val lat = repository.getLatitude()
             val lon = repository.getLongitude()
-            _weatherData.value = repository.getWeather(lat!!, lon!!).list
+            _weatherData.value = repository.getWeather(lat!!, lon!!, UNITS).list
             _uiState.update { state ->
                 state.copy(loading = false)
             }

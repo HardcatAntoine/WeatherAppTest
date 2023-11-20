@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapptest.R
 import com.example.weatherapptest.data.model.DataList
@@ -23,9 +24,11 @@ import kotlinx.coroutines.flow.onEach
 class WeatherFragment : Fragment() {
     lateinit var binding: FragmentWeatherBinding
     private val viewModel: WeatherViewModel by viewModels()
+    private val adapter = WeatherViewAdapter()
     private val itemClickListener = object : ItemClickListener {
         override fun onDetailsClickListener(position: Int, data: DataList) {
-
+            // val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
+            findNavController().navigate(R.id.action_weatherFragment_to_detailsFragment)
         }
 
     }
@@ -41,18 +44,10 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        val text = view.findViewById<TextView>(R.id.text)
-        text.setOnClickListener {
-            viewModel.print()
-        }
-        binding.btn.setOnClickListener {
-            viewModel.fetchWeatherData()
-        }
+        viewModel.fetchWeatherData()
+        initAdapter()
         viewModel.weatherData.observe(viewLifecycleOwner) { data ->
-            val adapter = WeatherViewAdapter(data)
-            binding.rvWeather.adapter = adapter
-            binding.rvWeather.layoutManager = LinearLayoutManager(requireContext())
-
+            adapter.setList(data)
         }
         viewModel.uiState.onEach { state ->
             if (!state.loading) {
@@ -60,5 +55,11 @@ class WeatherFragment : Fragment() {
                 binding.rvWeather.visibility = View.VISIBLE
             }
         }.launchIn(lifecycleScope)
+    }
+
+    fun initAdapter() {
+        binding.rvWeather.adapter = adapter
+        binding.rvWeather.layoutManager = LinearLayoutManager(requireContext())
+        adapter.setOnItemClickListener(itemClickListener)
     }
 }

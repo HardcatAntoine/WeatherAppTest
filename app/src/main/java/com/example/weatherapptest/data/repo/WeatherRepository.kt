@@ -9,8 +9,8 @@ class WeatherRepository @Inject constructor(
     private val apiService: ApiService,
     private val preference: Preference
 ) {
-    suspend fun getWeather(lat: String, lon: String): WeatherData {
-        return apiService.getWeatherData(lat, lon)
+    suspend fun getWeather(lat: String, lon: String, units: String): WeatherData {
+        return apiService.getWeatherData(lat, lon, units)
     }
 
     fun getLatitude(): String? {
