@@ -23,4 +23,9 @@
             android:name="Data"
             app:argType="com.example.weatherapptest.data.model.DataList" />
     </fragment>
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.example.weatherapptest.view.LocationFragment"
+        android:label="fragment_location"
+        tools:layout="@layout/fragment_location" />
 </navigation>

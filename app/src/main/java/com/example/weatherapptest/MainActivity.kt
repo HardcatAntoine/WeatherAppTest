@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.navigation.findNavController
 import com.example.weatherapptest.data.local.Preference
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -18,11 +20,44 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
-    @Inject lateinit var preference: Preference
+
+    @Inject
+    lateinit var preference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val bottomBar = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomBar.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.page_main -> {
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.weatherFragment)
+                    true
+                }
+
+                R.id.page_second -> {
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.locationFragment)
+                    true
+                }
+
+                R.id.page_third -> {
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.locationFragment)
+                    true
+                }
+
+                R.id.page_fourth -> {
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.locationFragment)
+                    true
+                }
+
+                R.id.page_fifth -> {
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.locationFragment)
+                    true
+                }
+
+                else -> false
+            }
+        }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
