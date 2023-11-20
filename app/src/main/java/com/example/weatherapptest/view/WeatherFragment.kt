@@ -9,7 +9,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapptest.R
+import com.example.weatherapptest.data.model.DataList
+import com.example.weatherapptest.data.model.Weather
 import com.example.weatherapptest.databinding.FragmentWeatherBinding
 import com.example.weatherapptest.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +23,13 @@ import kotlinx.coroutines.flow.onEach
 class WeatherFragment : Fragment() {
     lateinit var binding: FragmentWeatherBinding
     private val viewModel: WeatherViewModel by viewModels()
+    private val itemClickListener = object : ItemClickListener {
+        override fun onDetailsClickListener(position: Int, data: DataList) {
+
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,12 +43,21 @@ class WeatherFragment : Fragment() {
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         val text = view.findViewById<TextView>(R.id.text)
         text.setOnClickListener {
-           viewModel.print()
+            viewModel.print()
+        }
+        binding.btn.setOnClickListener {
+            viewModel.fetchWeatherData()
+        }
+        viewModel.weatherData.observe(viewLifecycleOwner) { data ->
+            val adapter = WeatherViewAdapter(data)
+            binding.rvWeather.adapter = adapter
+            binding.rvWeather.layoutManager = LinearLayoutManager(requireContext())
+
         }
         viewModel.uiState.onEach { state ->
             if (!state.loading) {
                 progressBar.visibility = View.GONE
-                text.visibility = View.VISIBLE
+                binding.rvWeather.visibility = View.VISIBLE
             }
         }.launchIn(lifecycleScope)
     }

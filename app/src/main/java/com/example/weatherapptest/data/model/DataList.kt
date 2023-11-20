@@ -1,5 +1,9 @@
 package com.example.weatherapptest.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class DataList(
     val clouds: Clouds,
     val dt: Int,
@@ -11,4 +15,4 @@ data class DataList(
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
-)
+) : Parcelable

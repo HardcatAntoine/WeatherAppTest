@@ -9,11 +9,15 @@ class WeatherRepository @Inject constructor(
     private val apiService: ApiService,
     private val preference: Preference
 ) {
-    suspend fun getWeather(lat: Double, lon: Double): WeatherData {
+    suspend fun getWeather(lat: String, lon: String): WeatherData {
         return apiService.getWeatherData(lat, lon)
     }
 
     fun getLatitude(): String? {
         return preference.getSavedLatitude()
+    }
+
+    fun getLongitude(): String? {
+        return preference.getSavedLongitude()
     }
 }

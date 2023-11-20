@@ -18,6 +18,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
+    @Inject lateinit var preference: Preference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationChanged(location: Location) {
                 val latitude = location.latitude.toString()
                 val longitude = location.longitude.toString()
+                preference.saveLatitude(latitude)
+                preference.saveLongitude(longitude)
                 // Действия при получении новой геопозиции
                 Log.d(
                     "GAY LOCATION",
