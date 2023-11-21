@@ -1,6 +1,7 @@
 package com.example.weatherapptest.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,8 @@ class WeatherFragment : Fragment() {
     private val adapter = WeatherViewAdapter()
     private val itemClickListener = object : ItemClickListener {
         override fun onDetailsClickListener(position: Int, data: DataList) {
-            // val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
-            findNavController().navigate(R.id.action_weatherFragment_to_detailsFragment)
+            val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
+            findNavController().navigate(action)
         }
 
     }
