@@ -18,13 +18,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var locationManager: LocationManager
-    private lateinit var locationListener: LocationListener
-
-    @Inject
-    lateinit var preference: Preference
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+       override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val bottomBar = findViewById<BottomNavigationView>(R.id.bottomNav)
@@ -58,24 +52,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-                val latitude = location.latitude.toString()
-                val longitude = location.longitude.toString()
-                preference.saveLatitude(latitude)
-                preference.saveLongitude(longitude)
-                // Действия при получении новой геопозиции
-                Log.d(
-                    "GAY LOCATION",
-                    "Latitude: $latitude, Longitude: $longitude",
-                )
-            }
 
-            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-            override fun onProviderEnabled(provider: String) {}
-            override fun onProviderDisabled(provider: String) {}
-        }
 
         // Включение обновлений геопозиции
         if (ActivityCompat.checkSelfPermission(
@@ -89,32 +66,9 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_CODE_LOCATION_PERMISSION
             )
-        } else {
-            startLocationUpdates()
         }
     }
 
-    private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_CODE_LOCATION_PERMISSION
-            )
-        } else {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                MIN_TIME_BW_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(),
-                locationListener
-            )
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -122,29 +76,23 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            startLocationUpdates()
-        } else {
-            Toast.makeText(
-                this,
-                "Location permission denied",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+//        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION &&
+//            grantResults.isNotEmpty() &&
+//            grantResults[0] == PackageManager.PERMISSION_GRANTED
+//        ) {
+//           // startLocationUpdates()
+//        } else {
+//            Toast.makeText(
+//                this,
+//                "Location permission denied",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        locationManager.removeUpdates(locationListener)
-    }
 
 
     companion object {
         private const val REQUEST_CODE_LOCATION_PERMISSION = 100
-        private const val MIN_TIME_BW_UPDATES: Long = 1000 // 1 second
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 10 // 10 meters
     }
 }

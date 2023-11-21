@@ -26,11 +26,9 @@ class WeatherViewModel @Inject constructor(
     val weatherData: LiveData<List<DataList>>
         get() = _weatherData
 
-    fun fetchWeatherData() {
+    fun fetchWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            val lat = repository.getLatitude()
-            val lon = repository.getLongitude()
-            _weatherData.value = repository.getWeather(lat!!, lon!!, UNITS).list
+            _weatherData.value = repository.getWeather(lat.toString(), lon.toString(), UNITS).list
             _uiState.update { state ->
                 state.copy(loading = false)
             }

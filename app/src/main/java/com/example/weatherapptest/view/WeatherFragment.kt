@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +24,8 @@ import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
-    lateinit var binding: FragmentWeatherBinding
+    private lateinit var binding: FragmentWeatherBinding
+    private lateinit var locationService: LocationService
     private val viewModel: WeatherViewModel by viewModels()
     private val adapter = WeatherViewAdapter()
     private val itemClickListener = object : ItemClickListener {
@@ -44,23 +46,30 @@ class WeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        viewModel.fetchWeatherData()
+        locationService = LocationService(requireContext()) { location ->
+            viewModel.fetchWeatherData(location.latitude, location.longitude)
+        }
+
         initAdapter()
         viewModel.weatherData.observe(viewLifecycleOwner) { data ->
             adapter.setList(data)
         }
         viewModel.uiState.onEach { state ->
             if (!state.loading) {
-                progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
                 binding.rvWeather.visibility = View.VISIBLE
             }
         }.launchIn(lifecycleScope)
     }
 
-    fun initAdapter() {
+    private fun initAdapter() {
         binding.rvWeather.adapter = adapter
         binding.rvWeather.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemClickListener(itemClickListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationService.clearListener()
     }
 }
