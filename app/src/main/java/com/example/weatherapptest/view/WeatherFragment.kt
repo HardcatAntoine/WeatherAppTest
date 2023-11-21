@@ -21,6 +21,9 @@ import com.example.weatherapptest.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.sql.Date
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -46,6 +49,10 @@ class WeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val timeStamp = Timestamp(System.currentTimeMillis())
+        val date = Date(timeStamp.time)
+        Log.d("DATE", "$date")
+
         locationService = LocationService(requireContext()) { location ->
             viewModel.fetchWeatherData(location.latitude, location.longitude)
         }

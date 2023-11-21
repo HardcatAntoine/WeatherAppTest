@@ -15,18 +15,23 @@ class Preference @Inject constructor(@ApplicationContext private val context: Co
         context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
 
     fun saveLatitude(latitude: String) {
-        sharedPreferences.edit { putString("lat", latitude) }
+        sharedPreferences.edit { putString(LAT_KEY, latitude) }
     }
 
     fun saveLongitude(longitude: String) {
-        sharedPreferences.edit { putString("lon", longitude) }
+        sharedPreferences.edit { putString(LON_KEY, longitude) }
     }
 
     fun getSavedLatitude(): String? {
-        return sharedPreferences.getString("lat", null)
+        return sharedPreferences.getString(LAT_KEY, null)
     }
 
     fun getSavedLongitude(): String? {
-        return sharedPreferences.getString("lon", null)
+        return sharedPreferences.getString(LON_KEY, null)
+    }
+
+    companion object {
+        const val LAT_KEY = "lat"
+        const val LON_KEY = "lon"
     }
 }
