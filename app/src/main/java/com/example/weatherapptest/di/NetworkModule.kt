@@ -2,6 +2,7 @@ package com.example.weatherapptest.di
 
 import com.example.weatherapptest.util.BASE_URL
 import com.example.weatherapptest.data.remote.ApiService
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,5 +52,10 @@ class NetworkModule {
     @Provides
     fun providesApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    fun providesGson(): Gson {
+        return Gson()
     }
 }
