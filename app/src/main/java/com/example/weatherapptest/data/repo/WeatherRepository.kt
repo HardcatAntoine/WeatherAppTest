@@ -13,11 +13,14 @@ class WeatherRepository @Inject constructor(
         return apiService.getWeatherData(lat, lon, units)
     }
 
-    fun getLatitude(): String? {
-        return preference.getSavedLatitude()
+    fun saveResponseData(response: WeatherData) {
+        preference.saveWeatherData(response)
     }
 
-    fun getLongitude(): String? {
-        return preference.getSavedLongitude()
+    fun getSavedData(): WeatherData? {
+        return preference.getWeatherData()
     }
+
+
+
 }

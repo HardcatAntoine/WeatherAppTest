@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapptest.R
 import com.example.weatherapptest.data.model.DataList
+import com.example.weatherapptest.data.model.ForecastPreviewUIModel
 
 class WeatherViewAdapter() :
     RecyclerView.Adapter<WeatherViewHolder>() {
-    private var list: List<DataList> = listOf()
+    private var list: List<ForecastPreviewUIModel> = listOf()
     var clickListener: ItemClickListener? = null
     fun setOnItemClickListener(clickListener: ItemClickListener) {
         this.clickListener = clickListener
@@ -32,7 +33,7 @@ class WeatherViewAdapter() :
         }
     }
 
-    fun setList(list: List<DataList>) {
+    fun setList(list: List<ForecastPreviewUIModel>) {
         this.list = list
     }
 

@@ -1,13 +1,11 @@
 package com.example.weatherapptest.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapptest.data.model.DataList
 import com.example.weatherapptest.data.repo.WeatherRepository
 import com.example.weatherapptest.util.UNITS
+import com.example.weatherapptest.util.toForecastPreviewUIModel
 import com.example.weatherapptest.view.WeatherFragmentUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,18 +20,31 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WeatherFragmentUIState())
     val uiState = _uiState.asStateFlow()
-    private val _weatherData = MutableLiveData<List<DataList>>()
-    val weatherData: LiveData<List<DataList>>
-        get() = _weatherData
 
     fun fetchWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            _weatherData.value = repository.getWeather(lat.toString(), lon.toString(), UNITS).list
-            _uiState.update { state ->
-                state.copy(loading = false)
+            val localData = repository.getSavedData()
+            if (localData == null) {
+                val response = repository.getWeather(lat.toString(), lon.toString(), UNITS)
+                repository.saveResponseData(response)
+                _uiState.update { state ->
+                    state.copy(
+                        loading = false,
+                        response.toSingleDayForecast().toForecastPreviewUIModel()
+                    )
+                }
+            } else {
+                _uiState.update { state ->
+                    state.copy(
+                        loading = false,
+                        forecastDay = localData.toSingleDayForecast().toForecastPreviewUIModel()
+                    )
+                }
             }
+
         }
+
     }
-
-
 }
+
+

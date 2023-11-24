@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.weatherapptest.R
 import com.example.weatherapptest.data.model.DataList
+import com.example.weatherapptest.data.model.ForecastPreviewUIModel
 
 class WeatherViewHolder(itemView: View) : ViewHolder(itemView) {
     private val date = itemView.findViewById<TextView>(R.id.tv_date)
@@ -14,13 +15,13 @@ class WeatherViewHolder(itemView: View) : ViewHolder(itemView) {
     private val atmosphericPressure = itemView.findViewById<TextView>(R.id.tv_atmospheric_pressure)
     private val windSpeed = itemView.findViewById<TextView>(R.id.tv_wind_speed)
 
-    fun bindWeather(item: DataList) {
-        date.text = item.dt_txt
-        temp.text = "${item.main.temp_min}°C/${item.main.temp_max}°C"
-        clouds.text = "${item.clouds.all}%"
-        relativeHumidity.text = "${item.main.humidity}%"
-        atmosphericPressure.text = "${item.main.pressure}hPa"
-        windSpeed.text = "${item.wind.speed}meter/sec"
+    fun bindWeather(item: ForecastPreviewUIModel) {
+        date.text = item.date
+        temp.text = "${item.temp_max}°C/${item.temp_min}°C"
+        clouds.text = "${item.clouds}%"
+        relativeHumidity.text = "${item.humidity}%"
+        atmosphericPressure.text = "${item.pressure}hPa"
+        windSpeed.text = "${item.windSpeed}meter/sec"
 
     }
 }

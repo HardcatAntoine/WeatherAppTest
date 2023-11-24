@@ -31,13 +31,13 @@ class WeatherFragment : Fragment() {
     private lateinit var locationService: LocationService
     private val viewModel: WeatherViewModel by viewModels()
     private val adapter = WeatherViewAdapter()
-    private val itemClickListener = object : ItemClickListener {
-        override fun onDetailsClickListener(position: Int, data: DataList) {
-            val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
-            findNavController().navigate(action)
-        }
-
-    }
+//    private val itemClickListener = object : ItemClickListener {
+//        override fun onDetailsClickListener(position: Int, data: DataList) {
+//            val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
+//            findNavController().navigate(action)
+//        }
+//
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,13 +58,12 @@ class WeatherFragment : Fragment() {
         }
 
         initAdapter()
-        viewModel.weatherData.observe(viewLifecycleOwner) { data ->
-            adapter.setList(data)
-        }
+
         viewModel.uiState.onEach { state ->
             if (!state.loading) {
                 binding.progressBar.visibility = View.GONE
                 binding.rvWeather.visibility = View.VISIBLE
+                adapter.setList(state.forecastDay)
             }
         }.launchIn(lifecycleScope)
     }
@@ -72,7 +71,7 @@ class WeatherFragment : Fragment() {
     private fun initAdapter() {
         binding.rvWeather.adapter = adapter
         binding.rvWeather.layoutManager = LinearLayoutManager(requireContext())
-        adapter.setOnItemClickListener(itemClickListener)
+        //adapter.setOnItemClickListener(itemClickListener)
     }
 
     override fun onDestroy() {
