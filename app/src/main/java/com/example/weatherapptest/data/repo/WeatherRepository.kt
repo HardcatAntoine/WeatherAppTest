@@ -4,6 +4,7 @@ import com.example.weatherapptest.data.local.Preference
 import com.example.weatherapptest.data.model.SingleDayForecast
 import com.example.weatherapptest.data.model.WeatherData
 import com.example.weatherapptest.data.remote.ApiService
+import java.text.FieldPosition
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
@@ -17,6 +18,10 @@ class WeatherRepository @Inject constructor(
         } else {
             getSingleDayForecasts()
         }
+    }
+
+    fun getSingleDayForecast(index: Int): SingleDayForecast? {
+       return getSingleDayForecasts()?.get(index)
     }
 
     private fun saveSingleDayForecasts(data: List<SingleDayForecast>) {

@@ -20,8 +20,8 @@
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <argument
-            android:name="Date"
-            app:argType="string" />
+            android:name="index"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/locationFragment"

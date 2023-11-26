@@ -33,8 +33,8 @@ class WeatherFragment : Fragment() {
     private val viewModel: WeatherViewModel by viewModels()
     private val adapter = WeatherViewAdapter()
     private val itemClickListener = object : ItemClickListener {
-        override fun onDetailsClickListener(position: Int, data: String) {
-            val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(data)
+        override fun onDetailsClickListener(position: Int) {
+            val action = WeatherFragmentDirections.actionWeatherFragmentToDetailsFragment(position)
             findNavController().navigate(action)
         }
     }

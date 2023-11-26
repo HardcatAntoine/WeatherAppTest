@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapptest.databinding.FragmentDetailsBinding
 import com.example.weatherapptest.viewmodel.DetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
@@ -32,10 +35,16 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-//        viewModel.fetchDetailWeatherData(args)
-//        viewModel.detailUIState.onEach { state ->
-//            adapter.setList(state.forecastDay)
-//        }
+        viewModel.getSingleDayForecast(args.index)
+        viewModel.detailUIState.onEach { state ->
+            val singleDayForecast = state.forecastDay
+            if (singleDayForecast == null) {
+                Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+            } else {
+                adapter.setList(state.forecastDay.list)
+                binding.city.text = state.forecastDay.city.name
+            }
+        }.launchIn(lifecycleScope)
     }
 
 

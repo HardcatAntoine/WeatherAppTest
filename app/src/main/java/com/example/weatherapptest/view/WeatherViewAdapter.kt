@@ -29,7 +29,7 @@ class WeatherViewAdapter() :
         val item = list[position]
         holder.bindWeather(item)
         holder.itemView.setOnClickListener {
-            clickListener?.onDetailsClickListener(position, item.date)
+            clickListener?.onDetailsClickListener(position)
         }
     }
 
