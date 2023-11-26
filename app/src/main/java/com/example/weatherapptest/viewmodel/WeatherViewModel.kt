@@ -23,21 +23,21 @@ class WeatherViewModel @Inject constructor(
 
     fun fetchWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            val localData = repository.getSavedData()
-            if (localData == null) {
-                val response = repository.getWeather(lat.toString(), lon.toString(), UNITS)
-                repository.saveResponseData(response)
+            val weatherData = repository.getWeather(lat.toString(), lon.toString(), UNITS)
+            if (weatherData == null) {
                 _uiState.update { state ->
                     state.copy(
                         loading = false,
-                        response.toSingleDayForecast().toForecastPreviewUIModel()
+                        forecastDay = emptyList(),
+                        error = true
                     )
                 }
             } else {
                 _uiState.update { state ->
                     state.copy(
                         loading = false,
-                        forecastDay = localData.toSingleDayForecast().toForecastPreviewUIModel()
+                        forecastDay = weatherData.toForecastPreviewUIModel(),
+                        error = false
                     )
                 }
             }
