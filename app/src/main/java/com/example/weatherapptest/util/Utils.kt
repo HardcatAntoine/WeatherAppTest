@@ -2,8 +2,12 @@ package com.example.weatherapptest.util
 
 import com.example.weatherapptest.data.model.ForecastPreviewUIModel
 import com.example.weatherapptest.data.model.SingleDayForecast
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.sql.Date
 import java.sql.Timestamp
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 fun convertToDate(timeStamp: Int): Date {
     return Date(Timestamp(timeStamp.toLong() * 1000).time)
@@ -12,8 +16,10 @@ fun convertToDate(timeStamp: Int): Date {
 fun List<Number>.calcAverage(): Double {
     var sum = 0.0
     this.forEach { sum += it.toDouble() }
-    return sum / this.size
+    val random = sum / this.size
+    return random.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
 }
+
 fun List<SingleDayForecast>.toForecastPreviewUIModel(): List<ForecastPreviewUIModel> {
     return this.map { singleDayForecast ->
         ForecastPreviewUIModel(

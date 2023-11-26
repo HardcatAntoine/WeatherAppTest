@@ -20,8 +20,8 @@
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <argument
-            android:name="Data"
-            app:argType="com.example.weatherapptest.data.model.DataList" />
+            android:name="Date"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/locationFragment"

@@ -22,6 +22,5 @@ class WeatherViewHolder(itemView: View) : ViewHolder(itemView) {
         relativeHumidity.text = "${item.humidity}%"
         atmosphericPressure.text = "${item.pressure}hPa"
         windSpeed.text = "${item.windSpeed}meter/sec"
-
     }
 }
