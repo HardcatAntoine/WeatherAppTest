@@ -21,7 +21,7 @@ class WeatherRepository @Inject constructor(
     }
 
     fun getSingleDayForecast(index: Int): SingleDayForecast? {
-       return getSingleDayForecasts()?.get(index)
+        return getSingleDayForecasts()?.get(index)
     }
 
     private fun saveSingleDayForecasts(data: List<SingleDayForecast>) {
@@ -32,5 +32,16 @@ class WeatherRepository @Inject constructor(
         return preference.getWeatherData()
     }
 
+    fun checkSavedDate(currentDate: String): Boolean {
+        val savedDate = preference.getSavedDate()
+        return savedDate == currentDate
+    }
 
+    fun clearPreferences() {
+        preference.clearWeatherData()
+    }
+
+    fun saveCurrentDate(date: String) {
+        preference.saveCurrentDate(date)
+    }
 }

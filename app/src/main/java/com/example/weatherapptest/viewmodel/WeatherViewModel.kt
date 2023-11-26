@@ -1,6 +1,5 @@
 package com.example.weatherapptest.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapptest.data.repo.WeatherRepository
@@ -43,7 +42,13 @@ class WeatherViewModel @Inject constructor(
             }
 
         }
+    }
 
+    fun checkSavedDate(date: String) {
+        if (!repository.checkSavedDate(date)) {
+            repository.clearPreferences()
+            repository.saveCurrentDate(date)
+        }
     }
 }
 

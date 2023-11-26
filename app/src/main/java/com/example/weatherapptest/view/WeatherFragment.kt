@@ -50,15 +50,12 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val timeStamp = Timestamp(System.currentTimeMillis())
-        val date = Date(timeStamp.time)
-        Log.d("DATE", "$date")
-
+        val date = Date(timeStamp.time).toString()
+        viewModel.checkSavedDate("2023-11-27")
         locationService = LocationService(requireContext()) { location ->
             viewModel.fetchWeatherData(location.latitude, location.longitude)
         }
-
         initAdapter()
-
         viewModel.uiState.onEach { state ->
             if (!state.loading) {
                 binding.progressBar.visibility = View.GONE
