@@ -11,8 +11,13 @@ class WeatherRepository @Inject constructor(
     private val apiService: ApiService,
     private val preference: Preference
 ) {
-    suspend fun getWeather(lat: String, lon: String, units: String): List<SingleDayForecast>? {
-        return if (getSingleDayForecasts() == null) {
+    suspend fun getWeather(
+        lat: String,
+        lon: String,
+        units: String,
+        date: String
+    ): List<SingleDayForecast>? {
+        return if (getSingleDayForecasts() == null || !checkSavedAndCurrentDate(date)) {
             saveSingleDayForecasts(apiService.getWeatherData(lat, lon, units).toSingleDayForecast())
             getSingleDayForecasts()
         } else {
@@ -32,13 +37,9 @@ class WeatherRepository @Inject constructor(
         return preference.getWeatherData()
     }
 
-    fun checkSavedDate(currentDate: String): Boolean {
+    private fun checkSavedAndCurrentDate(currentDate: String): Boolean {
         val savedDate = preference.getSavedDate()
         return savedDate == currentDate
-    }
-
-    fun clearPreferences() {
-        preference.clearWeatherData()
     }
 
     fun saveCurrentDate(date: String) {

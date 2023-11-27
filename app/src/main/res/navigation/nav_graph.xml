@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_weatherFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_invalidConnectionFragment"
+            app:destination="@id/invalidConnectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -23,6 +26,11 @@
             android:name="index"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/invalidConnectionFragment"
+        android:name="com.example.weatherapptest.view.InvalidConnectionFragment"
+        android:label="fragment_invalid_connection"
+        tools:layout="@layout/fragment_invalid_connection" />
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.example.weatherapptest.view.LocationFragment"

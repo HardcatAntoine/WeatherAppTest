@@ -20,9 +20,9 @@ class WeatherViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(WeatherFragmentUIState())
     val uiState = _uiState.asStateFlow()
 
-    fun fetchWeatherData(lat: Double, lon: Double) {
+    fun fetchWeatherData(lat: Double?, lon: Double?, date: String) {
         viewModelScope.launch {
-            val weatherData = repository.getWeather(lat.toString(), lon.toString(), UNITS)
+            val weatherData = repository.getWeather(lat.toString(), lon.toString(), UNITS, date)
             if (weatherData == null) {
                 _uiState.update { state ->
                     state.copy(
@@ -43,12 +43,8 @@ class WeatherViewModel @Inject constructor(
 
         }
     }
-
-    fun checkSavedDate(date: String) {
-        if (!repository.checkSavedDate(date)) {
-            repository.clearPreferences()
-            repository.saveCurrentDate(date)
-        }
+    fun saveDate(date: String){
+        repository.saveCurrentDate(date)
     }
 }
 

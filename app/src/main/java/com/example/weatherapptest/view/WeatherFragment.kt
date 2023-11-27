@@ -1,22 +1,16 @@
 package com.example.weatherapptest.view
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherapptest.R
-import com.example.weatherapptest.data.model.DataList
-import com.example.weatherapptest.data.model.ForecastPreviewUIModel
-import com.example.weatherapptest.data.model.Weather
 import com.example.weatherapptest.databinding.FragmentWeatherBinding
 import com.example.weatherapptest.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +18,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.sql.Date
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -51,18 +44,16 @@ class WeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val timeStamp = Timestamp(System.currentTimeMillis())
         val date = Date(timeStamp.time).toString()
-        viewModel.checkSavedDate("2023-11-27")
-        locationService = LocationService(requireContext()) { location ->
-            viewModel.fetchWeatherData(location.latitude, location.longitude)
-        }
+        viewModel.saveDate(date)
         initAdapter()
-        viewModel.uiState.onEach { state ->
-            if (!state.loading) {
-                binding.progressBar.visibility = View.GONE
-                binding.rvWeather.visibility = View.VISIBLE
-                adapter.setList(state.forecastDay)
+        observer()
+        if (isInternetAvaliable()) {
+            locationService = LocationService(requireContext()) { location ->
+                viewModel.fetchWeatherData(location.latitude, location.longitude, date)
             }
-        }.launchIn(lifecycleScope)
+        } else {
+            viewModel.fetchWeatherData(null, null, date)
+        }
     }
 
     private fun initAdapter() {
@@ -75,4 +66,23 @@ class WeatherFragment : Fragment() {
         super.onDestroy()
         locationService.clearListener()
     }
+
+    private fun isInternetAvaliable(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = connectivityManager.activeNetwork
+        val activeNetwork = connectivityManager.getNetworkCapabilities(networkCapabilities)
+        return activeNetwork != null
+    }
+
+    private fun observer() {
+        viewModel.uiState.onEach { state ->
+            if (!state.loading) {
+                binding.progressBar.visibility = View.GONE
+                binding.rvWeather.visibility = View.VISIBLE
+                adapter.setList(state.forecastDay)
+            }
+        }.launchIn(lifecycleScope)
+    }
+
 }
